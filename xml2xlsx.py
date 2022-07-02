@@ -8,6 +8,7 @@ import pandas as pd
 # import openpyxl
 
 ean_file = 'barcodes.csv'
+customer_file = 'customers.csv'
 
 
 # Get XML data
@@ -22,9 +23,10 @@ def parse_xml(fp):
     root = tree.getroot()
 
     invoice_nr = root.find('.//DatiGenerali/DatiGeneraliDocumento/Numero').text
-    customer = root.find('.//CessionarioCommittente/DatiAnagrafici/Anagrafica/Denominazione')\
-        .text.replace(".", "").replace(" ", "-")
-    name = "FATT-NR_" + invoice_nr + "_" + customer
+    customer_name_from_xml = root.find('.//CessionarioCommittente/DatiAnagrafici/Anagrafica/Denominazione')\
+        .text.replace(".", "")
+    customer_name = shorten_customer_name(customer_name_from_xml).replace(" ", "_")
+    name = "FATT_NR_" + invoice_nr + "_" + customer_name
 
     dbs = root.find('.//DatiBeniServizi')
     dl = dbs.findall('DettaglioLinee')
@@ -37,6 +39,16 @@ def parse_xml(fp):
 
     print("Done!")
     return dl, a_id, name
+
+
+# Find shortened customer name in file
+def shorten_customer_name(c_name):
+    with open(customer_file, 'r', encoding='utf-8-sig') as f:
+        reader = list(csv.DictReader(f))
+        for row in reader:
+            if row['original_customer_name'] == c_name:
+                return row['shown_customer_name']
+        return "n/a"
 
 
 # Create Pandas DF
