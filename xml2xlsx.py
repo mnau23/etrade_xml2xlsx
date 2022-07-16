@@ -48,7 +48,7 @@ def shorten_customer_name(c_name):
         for row in reader:
             if row['original_customer_name'] == c_name:
                 return row['shown_customer_name']
-        return "n/a"
+        return "na"
 
 
 # Create Pandas DF
