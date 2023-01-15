@@ -9,7 +9,7 @@ pip install -r requirements/requirements.txt
 ```
 
 ## Usage
-Run `py xml2xlsx.py`
+Run `python src/main.py`
 
 ## License
 **[GPL v3](https://www.gnu.org/licenses/gpl-3.0)** - Copyright 2021 © 

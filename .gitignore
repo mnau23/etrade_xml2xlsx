@@ -338,5 +338,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,windows,macos
 
 ###
-barcodes.csv
-customers.csv
+files/barcodes.csv
+files/customers.csv
