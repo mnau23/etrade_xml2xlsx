@@ -10,13 +10,13 @@ customer_file: Path = files_folder / "customers.csv"
 
 def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
     """
-    Retrieve data from input file.
+    Retrieve data from input XML file.
 
     Parameters:
-        fp (Path): path of input XML file
+        fp (Path): path of file
 
     Returns:
-        list[et.Element]: list with all elements found in XML structure
+        list[Element]: list with all elements found in XML file
         list[str]: list with only the article's id (full description = id + description)
         str: name of Excel file to be created
     """
@@ -50,7 +50,7 @@ def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
 
 def shorten_customer_name(c_name: str) -> str:
     """
-    Get shortened customer name in file.
+    Get shortened customer name.
 
     Parameters:
         c_name (str): customer name found in XML file
@@ -72,10 +72,10 @@ def make_df(dl) -> pd.DataFrame:
     Create Pandas DataFrame.
 
     Parameters:
-        dl (list[et.Element]): list of elements from XML file
+        dl (list[Element]): list of elements from XML file
 
     Returns:
-        DataFrame: contains all rows with related details
+        DataFrame: contains important rows from XML file with related details
     """
 
     # Pandas DF structure
@@ -104,13 +104,13 @@ def make_df(dl) -> pd.DataFrame:
 
 def get_ean(id_list: list[str]) -> list[str]:
     """
-    Search EAN for each item.
+    Search EAN barcodes for each article.
 
     Parameters:
-        id_list (list[str]): list of items ID
+        id_list (list[str]): list of article IDs
 
     Returns:
-        list[str]: list of EANs corresponding to id_list
+        list[str]: list of EAN barcodes corresponding to each article ID
     """
 
     ean: list[str] = list()
@@ -131,20 +131,20 @@ def get_ean(id_list: list[str]) -> list[str]:
     return ean
 
 
-def make_xlsx(fname: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
+def make_xlsx(f_name: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
     """
     Create Excel file.
 
     Parameters:
-        fname (str): output Excel file name to be created
+        f_name (str): name of output Excel file to be created
         out_xlsx (Path): path of output Excel file
         df (DataFrame): values to be converted into Excel
 
     Returns:
-        list[str]: list of EANs corresponding to id_list
+        ExcelWriter: object for writing DataFrame into Excel sheets
     """
 
-    print("Creating '" + fname + ".xlsx'...")
+    print("Creating '" + f_name + ".xlsx'...")
     writer: pd.ExcelWriter = pd.ExcelWriter(out_xlsx, engine="xlsxwriter")
     df.to_excel(writer, index=False, encoding="utf-8", sheet_name="Codici EAN Fattura")
     return writer
@@ -152,14 +152,11 @@ def make_xlsx(fname: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
 
 def format_xlsx(df: pd.DataFrame, wr):
     """
-    Give a better format to the Excel file.
+    Improve Excel file formatting.
 
     Parameters:
         df (DataFrame): values to be converted into Excel
-        wr (ExcelWrite): writer from DataFrame to Excel file
-
-    Returns:
-        list[str]: list of EANs corresponding to id_list
+        wr (ExcelWriter): object for writing DataFrame into Excel sheets
     """
 
     print("Formatting file...")
