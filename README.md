@@ -22,7 +22,7 @@ Run `python src/main.py`
 ### Build executable with PyInstaller on Windows
 
 In order to build and create an executable for this project, you have to run the following command.\
-**NB**: Option `--add-data` loads into the executable some necessary binary files
+**NB**: Option `--add-data` loads some required non-binary files into the executable
 (they must be saved under the root of the project).
 ```bash
 cd src
