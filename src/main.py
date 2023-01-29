@@ -29,6 +29,8 @@ def main():
 
     format_xlsx(data_frame, writer)
 
+    input('Press Enter to exit...')
+
 
 if __name__ == "__main__":
     main()

@@ -1,11 +1,29 @@
 from pathlib import Path
 import csv
+import os
 import pandas as pd
+import sys
 import xml.etree.ElementTree as et
 
-files_folder: Path = Path("files/")
-ean_file: Path = files_folder / "barcodes.csv"
-customer_file: Path = files_folder / "customers.csv"
+
+def resource_path(relative_path) -> str:
+    """
+    Get absolute path to a resource (works for both dev and PyInstaller).
+
+    Parameters:
+        relative_path (str): name of file
+
+    Returns:
+        str: correct full path of file
+    """
+
+    try:
+        # PyInstaller creates a temp folder and stores path into var _MEIPASS
+        base_path: str = sys._MEIPASS
+    except Exception:
+        base_path: str = os.path.abspath("./files/")
+
+    return os.path.join(base_path, relative_path)
 
 
 def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
@@ -59,7 +77,7 @@ def shorten_customer_name(c_name: str) -> str:
         str: customer name with improved readability
     """
 
-    with open(customer_file, "r", encoding="utf-8-sig") as f:
+    with open(resource_path("customers.csv"), "r", encoding="utf-8-sig") as f:
         reader = list(csv.DictReader(f))
         for row in reader:
             if row['original_customer_name'] == c_name:
@@ -114,7 +132,7 @@ def get_ean(id_list: list[str]) -> list[str]:
     """
 
     ean: list[str] = list()
-    with open(ean_file, "r", encoding="utf-8-sig") as f:
+    with open(resource_path("barcodes.csv"), "r", encoding="utf-8-sig") as f:
         reader = list(csv.DictReader(f))
         for i in id_list:
             barcode = ""
