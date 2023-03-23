@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "etrade-xml2xlsx"
+version = "1.0.0"
+description = "Python program for converting xml files to xlsx"
+license = "GPLv3"
+authors = ["mnau23"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+pandas = "^1.5.3"
+pyinstaller = "^5.9.0"
+xlsxwriter = "^3.0.9"
+
+[tool.poetry.dev-dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 90
+target-version = ["py310"]

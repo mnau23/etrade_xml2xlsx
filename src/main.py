@@ -22,14 +22,14 @@ def main():
     art_barcodes: list[str] = get_ean(art_ids)
 
     # Add barcodes to the DF
-    data_frame['barcode'] = art_barcodes
+    data_frame["barcode"] = art_barcodes
 
     output_xlsx: Path = file_path.parent / (file_name + ".xlsx")
     writer: pd.ExcelWriter = make_xlsx(file_name, output_xlsx, data_frame)
 
     format_xlsx(data_frame, writer)
 
-    input('Press Enter to exit...')
+    input("Press Enter to exit...")
 
 
 if __name__ == "__main__":
