@@ -179,7 +179,7 @@ def make_xlsx(f_name: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
 
     print("Creating '" + f_name + ".xlsx'...")
     writer: pd.ExcelWriter = pd.ExcelWriter(out_xlsx, engine="xlsxwriter")
-    df.to_excel(writer, index=False, encoding="utf-8", sheet_name="Codici EAN Fattura")
+    df.to_excel(writer, index=False, sheet_name="Codici EAN Fattura")
     return writer
 
 
@@ -218,5 +218,5 @@ def format_xlsx(df: pd.DataFrame, wr):
         col_idx = df.columns.get_loc(column)
         worksheet.set_column(col_idx, col_idx, column_width)
 
-    wr.save()
+    wr.close()
     print("File Excel created!")
