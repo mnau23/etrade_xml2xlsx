@@ -3,7 +3,7 @@ import csv
 import os
 import pandas as pd
 import sys
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as elemTree
 
 
 def resource_path(relative_path) -> str:
@@ -26,7 +26,7 @@ def resource_path(relative_path) -> str:
     return os.path.join(base_path, relative_path)
 
 
-def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
+def parse_xml(fp: Path) -> tuple[list[elemTree.Element], list[str], str]:
     """
     Retrieve data from input XML file.
 
@@ -44,8 +44,8 @@ def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
     a_id: list[str] = list()
 
     # XML structure
-    tree: et = et.parse(fp)
-    root: et.Element = tree.getroot()
+    tree: elemTree = elemTree.parse(fp)
+    root: elemTree.Element = tree.getroot()
 
     invoice_nr: str = root.find(".//DatiGenerali/DatiGeneraliDocumento/Numero").text
     customer_name_from_xml: str = root.find(
@@ -54,8 +54,8 @@ def parse_xml(fp: Path) -> tuple[list[et.Element], list[str], str]:
     customer_name: str = shorten_customer_name(customer_name_from_xml).replace(" ", "_")
     name: str = "FATT_NR_" + invoice_nr + "_" + customer_name
 
-    dbs: et.Element | None = root.find(".//DatiBeniServizi")
-    dl: list[et.Element] = dbs.findall("DettaglioLinee")
+    dbs: elemTree.Element | None = root.find(".//DatiBeniServizi")
+    dl: list[elemTree.Element] = dbs.findall("DettaglioLinee")
 
     # Remove last element -useless in this XML file-
     dl.pop(len(dl) - 1)
@@ -194,21 +194,15 @@ def format_xlsx(df: pd.DataFrame, wr):
 
     print("Formatting file...")
 
-    # Cell formats
+    # Define formats for Excel workbook
     workbook = wr.book
     worksheet = wr.sheets["Codici EAN Fattura"]
     format_header = workbook.add_format(
         {"align": "center", "bold": True, "border": 1, "fg_color": "#d9d9d9"}
     )
-    format_float = workbook.add_format({"align": "center", "num_format": "#0.00"})
+    format_float = workbook.add_format({"align": "center", "num_format": "€ #,##0.00"})
     format_int = workbook.add_format({"align": "center"})
     format_pct = workbook.add_format({"align": "center", "num_format": "0%"})
-    for col_num, val in enumerate(df.columns.values):
-        worksheet.write(0, col_num, val, format_header)  # header
-    worksheet.set_column("C:C", None, format_int)  # quantity
-    worksheet.set_column("D:D", None, format_float)  # unit price
-    worksheet.set_column("E:E", None, format_float)  # total price
-    worksheet.set_column("F:F", None, format_pct)  # VAT
 
     # Auto-adjust columns' width
     for column in df:
@@ -217,6 +211,14 @@ def format_xlsx(df: pd.DataFrame, wr):
             column_width = 5
         col_idx = df.columns.get_loc(column)
         worksheet.set_column(col_idx, col_idx, column_width)
+
+    # Format columns
+    for col_num, val in enumerate(df.columns.values):
+        worksheet.write(0, col_num, val, format_header)  # header
+    worksheet.set_column("C:C", None, format_int)  # quantity
+    worksheet.set_column("D:D", None, format_float)  # unit price
+    worksheet.set_column("E:E", None, format_float)  # total price
+    worksheet.set_column("F:F", None, format_pct)  # VAT
 
     wr.close()
     print("File Excel created!")
