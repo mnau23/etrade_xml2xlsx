@@ -4,19 +4,6 @@
 > ([Fattura Elettronica](https://www.agid.gov.it/it/piattaforme/fatturazione-elettronica))
 > into an Excel file.
 
-## Development
-
-### Requirements
-
-- Python 3.10
-- [Poetry](https://python-poetry.org/) installed globally
-
-### File formatting
-
-```bash
-poetry run black .
-```
-
 ## Usage
 
 Run `python src/main.py`
