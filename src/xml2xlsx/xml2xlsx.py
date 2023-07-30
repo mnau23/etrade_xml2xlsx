@@ -1,9 +1,10 @@
-from pathlib import Path
 import csv
 import os
-import pandas as pd
 import sys
 import xml.etree.ElementTree as elemTree
+from pathlib import Path
+
+import pandas as pd
 
 
 def resource_path(relative_path) -> str:

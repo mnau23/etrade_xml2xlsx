@@ -3,9 +3,10 @@ Main entrypoint.
 """
 
 from pathlib import Path
+
 import pandas as pd
 
-from xml2xlsx.xml2xlsx import parse_xml, make_df, get_ean, make_xlsx, format_xlsx
+from xml2xlsx.xml2xlsx import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
 
 
 def main():
