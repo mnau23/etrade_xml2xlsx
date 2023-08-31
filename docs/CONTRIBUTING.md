@@ -3,7 +3,7 @@
 A list of useful commands for working on this project.
 
 | Command                           | Description                    |
-| --------------------------------- | ------------------------------ |
+|-----------------------------------|--------------------------------|
 | `poetry add <package_name>`       | Add a new package              |
 | `poetry add <package_name> -D`    | Add a new package to dev-deps  |
 | `poetry env remove <env_name>`    | Remove a virtual environment   |

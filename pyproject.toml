@@ -8,17 +8,22 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-pandas = "^2.0.0"
-pyinstaller = "^5.13.0"
-xlsxwriter = "^3.1.0"
+pandas = "^2.1"
+pyinstaller = "^5.13"
+xlsxwriter = "^3.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
-isort = "^5.12.0"
+bandit = "^1.7"
+black = "^23.7"
+isort = "^5.12"
+pylint = "^2.17"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.bandit]
+exclude_dirs = [""]
 
 [tool.black]
 line-length = 90
