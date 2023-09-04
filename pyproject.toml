@@ -23,7 +23,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.bandit]
-exclude_dirs = [""]
+# exclude_dirs = [""]
 
 [tool.black]
 line-length = 90
@@ -36,3 +36,11 @@ force_grid_wrap = 0
 use_parentheses = true
 line_length = 90
 atomic = true
+
+[tool.pylint.messages_control]
+disable = ''',
+    '''
+
+[tool.pylint.options]
+ignored-argument-names = "_.*|^ignored_|^unused_|args|kwargs"
+max-line-length = "140"
