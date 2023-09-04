@@ -10,6 +10,9 @@ from xml2xlsx.xml2xlsx import format_xlsx, get_ean, make_df, make_xlsx, parse_xm
 
 
 def main():
+    """
+    Main function.
+    """
     file_path: Path = Path(input("Enter XML file path to convert...\n"))
 
     # Check if file is an XML

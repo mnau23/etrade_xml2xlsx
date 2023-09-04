@@ -1,3 +1,7 @@
+"""
+The core of the script.
+"""
+
 import csv
 import os
 import sys
@@ -27,12 +31,12 @@ def resource_path(relative_path) -> str:
     return os.path.join(base_path, relative_path)
 
 
-def parse_xml(fp: Path) -> tuple[list[elemTree.Element], list[str], str]:
+def parse_xml(path: Path) -> tuple[list[elemTree.Element], list[str], str]:
     """
     Retrieve data from input XML file.
 
     Parameters:
-        fp (Path): path of file
+        path (Path): path of file
 
     Returns:
         list[Element]: list with all elements found in XML file
@@ -40,12 +44,12 @@ def parse_xml(fp: Path) -> tuple[list[elemTree.Element], list[str], str]:
         str: name of Excel file to be created
     """
 
-    print("Retrieving data from XML file '" + fp.stem + "'...")
+    print("Retrieving data from XML file '" + path.stem + "'...")
 
-    a_id: list[str] = list()
+    a_id: list[str] = []
 
     # XML structure
-    tree: elemTree = elemTree.parse(fp)
+    tree: elemTree = elemTree.parse(path)
     root: elemTree.Element = tree.getroot()
 
     invoice_nr: str = root.find(".//DatiGenerali/DatiGeneraliDocumento/Numero").text
@@ -56,16 +60,16 @@ def parse_xml(fp: Path) -> tuple[list[elemTree.Element], list[str], str]:
     name: str = "FATT_NR_" + invoice_nr + "_" + customer_name
 
     dbs: elemTree.Element | None = root.find(".//DatiBeniServizi")
-    dl: list[elemTree.Element] = dbs.findall("DettaglioLinee")
+    details: list[elemTree.Element] = dbs.findall("DettaglioLinee")
 
     # Remove last element -useless in this XML file-
-    dl.pop(len(dl) - 1)
+    details.pop(len(details) - 1)
 
-    for node in dl:
+    for node in details:
         a_id.append(node.find("Descrizione").text.partition(" ")[0])
 
     print("Done!")
-    return dl, a_id, name
+    return details, a_id, name
 
 
 def shorten_customer_name(c_name: str) -> str:
@@ -79,20 +83,20 @@ def shorten_customer_name(c_name: str) -> str:
         str: customer name with improved readability
     """
 
-    with open(resource_path("customers.csv"), "r", encoding="utf-8-sig") as f:
-        reader = list(csv.DictReader(f))
+    with open(resource_path("customers.csv"), "r", encoding="utf-8-sig") as file:
+        reader = list(csv.DictReader(file))
         for row in reader:
             if row["original_customer_name"] == c_name:
                 return row["shown_customer_name"]
         return "na"
 
 
-def make_df(dl) -> pd.DataFrame:
+def make_df(detail_list) -> pd.DataFrame:
     """
     Create Pandas DataFrame.
 
     Parameters:
-        dl (list[Element]): list of elements from XML file
+        detail_list (list[Element]): list of elements from XML file
 
     Returns:
         DataFrame: contains important rows from XML file with related details
@@ -109,7 +113,7 @@ def make_df(dl) -> pd.DataFrame:
     ]
     rows = []
 
-    for node in dl:
+    for node in detail_list:
         s_desc = node.find("Descrizione").text
         s_qty = node.find("Quantita").text
         s_unit = node.find("PrezzoUnitario").text
@@ -147,9 +151,10 @@ def get_ean(id_list: list[str]) -> list[str]:
         list[str]: list of EAN barcodes corresponding to each article ID
     """
 
-    ean: list[str] = list()
-    with open(resource_path("barcodes.csv"), "r", encoding="utf-8-sig") as f:
-        reader = list(csv.DictReader(f))
+    ean: list[str] = []
+
+    with open(resource_path("barcodes.csv"), "r", encoding="utf-8-sig") as file:
+        reader = list(csv.DictReader(file))
         for i in id_list:
             barcode = ""
             for row in reader:
@@ -162,17 +167,18 @@ def get_ean(id_list: list[str]) -> list[str]:
                 ean.append(barcode)
             else:
                 ean.append("n/a")
+
     return ean
 
 
-def make_xlsx(f_name: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
+def make_xlsx(f_name: str, out_xlsx: Path, data_frame: pd.DataFrame) -> pd.ExcelWriter:
     """
     Create Excel file.
 
     Parameters:
         f_name (str): name of output Excel file to be created
         out_xlsx (Path): path of output Excel file
-        df (DataFrame): values to be converted into Excel
+        data_frame (DataFrame): values to be converted into Excel
 
     Returns:
         ExcelWriter: object for writing DataFrame into Excel sheets
@@ -180,24 +186,24 @@ def make_xlsx(f_name: str, out_xlsx: Path, df: pd.DataFrame) -> pd.ExcelWriter:
 
     print("Creating '" + f_name + ".xlsx'...")
     writer: pd.ExcelWriter = pd.ExcelWriter(out_xlsx, engine="xlsxwriter")
-    df.to_excel(writer, index=False, sheet_name="Codici EAN Fattura")
+    data_frame.to_excel(writer, index=False, sheet_name="Codici EAN Fattura")
     return writer
 
 
-def format_xlsx(df: pd.DataFrame, wr):
+def format_xlsx(data_frame: pd.DataFrame, writer):
     """
     Improve Excel file formatting.
 
     Parameters:
-        df (DataFrame): values to be converted into Excel
-        wr (ExcelWriter): object for writing DataFrame into Excel sheets
+        data_frame (DataFrame): values to be converted into Excel
+        writer (ExcelWriter): object for writing DataFrame into Excel sheets
     """
 
     print("Formatting file...")
 
     # Define formats for Excel workbook
-    workbook = wr.book
-    worksheet = wr.sheets["Codici EAN Fattura"]
+    workbook = writer.book
+    worksheet = writer.sheets["Codici EAN Fattura"]
     format_header = workbook.add_format(
         {"align": "center", "bold": True, "border": 1, "fg_color": "#d9d9d9"}
     )
@@ -206,20 +212,19 @@ def format_xlsx(df: pd.DataFrame, wr):
     format_pct = workbook.add_format({"align": "center", "num_format": "0%"})
 
     # Auto-adjust columns' width
-    for column in df:
-        column_width = max(df[column].astype(str).map(len).max(), len(column))
-        if column_width < 5:
-            column_width = 5
-        col_idx = df.columns.get_loc(column)
+    for column in data_frame:
+        column_width = max(data_frame[column].astype(str).map(len).max(), len(column))
+        column_width = max(column_width, 5)
+        col_idx = data_frame.columns.get_loc(column)
         worksheet.set_column(col_idx, col_idx, column_width)
 
     # Format columns
-    for col_num, val in enumerate(df.columns.values):
+    for col_num, val in enumerate(data_frame.columns.values):
         worksheet.write(0, col_num, val, format_header)  # header
     worksheet.set_column("C:C", None, format_int)  # quantity
     worksheet.set_column("D:D", None, format_float)  # unit price
     worksheet.set_column("E:E", None, format_float)  # total price
     worksheet.set_column("F:F", None, format_pct)  # VAT
 
-    wr.close()
+    writer.close()
     print("File Excel created!")
