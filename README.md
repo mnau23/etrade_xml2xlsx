@@ -10,7 +10,7 @@
 
 ## Usage
 
-Run `python src/main.py`
+Run `python xml2xlsx.py`
 
 ### Build executable with PyInstaller on Windows
 
@@ -18,11 +18,10 @@ In order to build and create an executable for this project, you have to run the
 **NB**: Option `--add-data` loads some required non-binary files into the executable.
 
 ```bash
-cd src
-python -m PyInstaller --add-data 'files/;.' --onefile main.py
+python -m PyInstaller --add-data 'files/;.' --onefile xml2xlsx.py
 ```
 
-Finally, the `.exe` file will be available in `src/dist/` folder.
+Finally, the `.exe` file will be available in `dist/` folder.
 
 ## License
 

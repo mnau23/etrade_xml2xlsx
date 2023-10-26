@@ -1,15 +1,15 @@
 """
-Main entrypoint.
+Script execution logic.
 """
 
 from pathlib import Path
 
 import pandas as pd
 
-from xml2xlsx.xml2xlsx import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
+from src.logic.core import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
 
 
-def main():
+def run():
     """
     Main function.
     """
@@ -34,7 +34,3 @@ def main():
     format_xlsx(data_frame, writer)
 
     input("Press Enter to exit...")
-
-
-if __name__ == "__main__":
-    main()
