@@ -53,11 +53,17 @@ def parse_xml(path: Path) -> tuple[list[elemTree.Element], list[str], str]:
     root: elemTree.Element = tree.getroot()
 
     invoice_nr: str = root.find(".//DatiGenerali/DatiGeneraliDocumento/Numero").text
-    customer_name_from_xml: str = root.find(
-        ".//CessionarioCommittente/DatiAnagrafici/Anagrafica/Denominazione"
-    ).text.replace(".", "")
-    customer_name: str = shorten_customer_name(customer_name_from_xml).replace(" ", "_")
-    name: str = "FATT_NR_" + invoice_nr + "_" + customer_name
+
+    c_path = ".//CessionarioCommittente/DatiAnagrafici/Anagrafica"
+    try:
+        customer_xml: str = root.find(f"{c_path}/Denominazione").text
+    except AttributeError:
+        first_name: str = root.find(f"{c_path}/Nome").text
+        last_name: str = root.find(f"{c_path}/Cognome").text
+        customer_xml: str = f"{last_name} {first_name}"
+    customer: str = shorten_customer_name(customer_xml.replace(".", "")).replace(" ", "_")
+
+    name: str = "FATT_NR_" + invoice_nr + "_" + customer
 
     dbs: elemTree.Element | None = root.find(".//DatiBeniServizi")
     details: list[elemTree.Element] = dbs.findall("DettaglioLinee")
