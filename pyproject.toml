@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "etrade-xml2xlsx"
 version = "1.0.0"
-description = "Python script for converting XML to XLSX"
+description = "App for converting XML to XLSX"
 license = "GPLv3"
 authors = ["mnau23"]
 readme = "README.md"
