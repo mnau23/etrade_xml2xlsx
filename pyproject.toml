@@ -7,10 +7,10 @@ authors = ["mnau23"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
-pandas = "~2.1"
+python = ">=3.10,<3.13"
+pandas = "~2.2"
 pyinstaller = "~5.13"
-xlsxwriter = "~3.1"
+xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "~1.7"

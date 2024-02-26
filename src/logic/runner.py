@@ -6,19 +6,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.logic.core import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
+from .core import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
 
 
-def run():
-    """
-    Main function.
-    """
-    file_path: Path = Path(input("Enter XML file path to convert...\n"))
-
-    # Check if file is an XML
-    while file_path.suffix != ".xml":
-        file_path = Path(input("Not an XML file. Enter a correct path...\n"))
-
+def run_xml2xlsx(file_path: Path):
     details, art_ids, file_name = parse_xml(file_path)
 
     data_frame: pd.DataFrame = make_df(details)
@@ -32,5 +23,3 @@ def run():
     writer: pd.ExcelWriter = make_xlsx(file_name, output_xlsx, data_frame)
 
     format_xlsx(data_frame, writer)
-
-    input("Press Enter to exit...")
