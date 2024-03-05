@@ -10,7 +10,10 @@
 
 ## Usage
 
-Run `python xml2xlsx.py`
+The app is available both as CLI and as GUI, respectively run:
+
+- `python src/cli.py`
+- `python src/gui.py`
 
 ### Build executable with PyInstaller on Windows
 
@@ -18,7 +21,7 @@ In order to build and create an executable for this project, you have to run the
 **NB**: Option `--add-data` loads some required non-binary files into the executable.
 
 ```bash
-python -m PyInstaller --add-data 'files/;.' --onefile xml2xlsx.py
+python -m PyInstaller --add-data 'files/;.' --onefile src/cli.py
 ```
 
 Finally, the `.exe` file will be available in `dist/` folder.

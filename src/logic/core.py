@@ -26,7 +26,7 @@ def resource_path(relative_path) -> str:
         # PyInstaller creates a temp folder and stores path into var _MEIPASS
         base_path: str = sys._MEIPASS
     except AttributeError:
-        base_path: str = os.path.abspath("./files/")
+        base_path: str = os.path.abspath("./assets/csv/")
 
     return os.path.join(base_path, relative_path)
 
