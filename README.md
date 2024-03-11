@@ -15,9 +15,35 @@ The app is available both as CLI and as GUI, respectively run:
 - `python src/cli.py`
 - `python src/gui.py`
 
-### Build executable with PyInstaller on Windows
+## Build
 
-In order to build and create an executable for this project, you have to run the following command.\
+### MacOS
+
+_py2app_ was used in order to build and create a MacOS app for this project.
+
+**Debug**: `python src/setup.py py2app -A` \
+**Release**: `python src/setup.py py2app`
+
+In both cases, the app will be available in `dist/` folder.
+
+**Create DMG**
+
+Once the release version is ready:
+- install `brew install create-dmg`
+- run
+  ```sh
+  mkdir -p dist/dmg
+  cp -r "dist/Xml2Xlsx.app" dist/dmg
+  create-dmg --volname "Xml2Xlsx" --volicon "assets/icon_512x512@2x@2x.icns" --window-pos 200 120 \
+    --window-size 600 300 --icon-size 100 --icon "Xml2lsx.app" 175 120 \
+    --hide-extension "Xml2Xlsx.app" --app-drop-link 425 120 "dist/Xml2Xlsx.dmg" "dist/dmg/"
+  ```
+
+### Windows
+
+(Currently disabled)
+
+_PyInstaller_ was used in order to build and create an executable for this project. \
 **NB**: Option `--add-data` loads some required non-binary files into the executable.
 
 ```bash

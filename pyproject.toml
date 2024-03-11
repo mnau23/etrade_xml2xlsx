@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 pandas = "~2.2"
+py2app = "~0.28"
 # pyinstaller = "~5.13"
 xlsxwriter = "~3.2"
 
