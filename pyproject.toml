@@ -15,7 +15,7 @@ xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "~1.7"
-black = "~23.12"
+black = "~24.3"
 isort = "~5.13"
 pylint = "~2.17"
 
