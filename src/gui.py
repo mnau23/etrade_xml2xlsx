@@ -1,3 +1,7 @@
+"""
+GUI entrypoint.
+"""
+
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox
@@ -18,7 +22,12 @@ WIDTH = 700
 HEIGHT = 260
 
 
+# pylint: disable=too-many-instance-attributes
 class Xml2XlsxGUI:
+    """
+    GUI main class.
+    """
+
     def __init__(self):
         self.root = tk.Tk()
 
@@ -26,7 +35,7 @@ class Xml2XlsxGUI:
         screen_height = self.root.winfo_screenheight()
         x = (screen_width - WIDTH) / 2
         y = (screen_height - HEIGHT) / 2
-        self.root.geometry("%dx%d+%d+%d" % (WIDTH, HEIGHT, x, y))
+        self.root.geometry("%dx%d+%d+%d" % (WIDTH, HEIGHT, x, y))  # pylint: disable=C0209
         # self.root.resizable(False, False)
         self.root.title("Xml2Xlsx")
         self.file_path = None
@@ -68,6 +77,7 @@ class Xml2XlsxGUI:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
 
+    # pylint: disable=missing-function-docstring
     def open_file(self):
         selected_file = filedialog.askopenfilename(
             initialdir="~", title="Choose XML", filetypes=(("XML Files", "*.xml"),)
@@ -82,6 +92,7 @@ class Xml2XlsxGUI:
                 text="No file selected!", font=ERROR_FONT, foreground=ERROR_COLOR
             )
 
+    # pylint: disable=missing-function-docstring
     def start_process(self):
         if self.file_path is not None:
             run_xml2xlsx(file_path=Path(self.file_path))
@@ -95,6 +106,7 @@ class Xml2XlsxGUI:
             # )
             messagebox.showerror(title="No File!", message="You didn't select any file!")
 
+    # pylint: disable=missing-function-docstring
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
             self.root.destroy()

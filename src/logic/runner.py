@@ -10,6 +10,14 @@ from .core import format_xlsx, get_ean, make_df, make_xlsx, parse_xml
 
 
 def run_xml2xlsx(file_path: Path):
+    """
+    Parameters:
+        file_path (Path): XML file path
+
+    Returns:
+        None
+    """
+
     details, art_ids, file_name = parse_xml(file_path)
 
     data_frame: pd.DataFrame = make_df(details)

@@ -8,16 +8,17 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-pandas = "~2.2"
+pandas = "2.2.1"
 py2app = "~0.28"
 # pyinstaller = "~5.13"
+setuptools = "70.3.0"
 xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "~1.7"
-black = "~24.4"
+bandit = "~1.8"
+black = "~24.10"
 isort = "~5.13"
-pylint = "~3.2"
+pylint = "~3.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -27,8 +28,8 @@ build-backend = "poetry.core.masonry.api"
 # exclude_dirs = [""]
 
 [tool.black]
+target-version = ["py312"]
 line-length = 90
-target-version = ["py310"]
 
 [tool.isort]
 multi_line_output = 3

@@ -8,6 +8,10 @@ from logic.runner import run_xml2xlsx
 
 
 def cli():
+    """
+    CLI main function.
+    """
+
     file_path: Path = Path(input("Enter XML file path to convert...\n"))
 
     # Check if file is an XML
