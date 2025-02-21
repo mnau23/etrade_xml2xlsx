@@ -16,9 +16,12 @@ xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "~1.8"
-black = "~24.10"
+black = "~25.1"
 isort = "~5.13"
+mypy = "~1.15"
+pip-audit = "~2.8"
 pylint = "~3.3"
+types-setuptools = "70.3.0.20240710"
 
 [build-system]
 requires = ["poetry-core"]
@@ -38,6 +41,10 @@ force_grid_wrap = 0
 use_parentheses = true
 line_length = 90
 atomic = true
+
+[tool.mypy]
+check_untyped_defs = true
+ignore_missing_imports = true
 
 [tool.pylint.messages_control]
 disable = ''',

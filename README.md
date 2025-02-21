@@ -1,4 +1,4 @@
-# Xml2Xlsx
+# Xml2Xlsx :bar_chart:
 
 [![code style: black](https://img.shields.io/badge/code%20style-black-39f)](https://github.com/psf/black)
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-39f)](https://github.com/pylint-dev/pylint)
