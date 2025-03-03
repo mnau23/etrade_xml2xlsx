@@ -8,6 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
+defusedxml = "~0.7"
 pandas = "2.2.1"
 py2app = "~0.28"
 # pyinstaller = "~5.13"
@@ -29,6 +30,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.bandit]
 # exclude_dirs = [""]
+skips = ["B405"]
 
 [tool.black]
 target-version = ["py312"]
@@ -53,6 +55,7 @@ disable = ''',
     import-error,
     no-member,
     protected-access,
+    too-many-locals
     '''
 
 [tool.pylint.options]

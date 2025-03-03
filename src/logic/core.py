@@ -5,10 +5,11 @@ Script core logic.
 import csv
 import os
 import sys
-import xml.etree.ElementTree as elemTree
+import xml.etree.ElementTree as elemTree  # only for type hints
 from pathlib import Path
 
 import pandas as pd
+from defusedxml import ElementTree as defusedElemTree
 
 
 def resource_path(relative_path) -> str:
@@ -22,11 +23,8 @@ def resource_path(relative_path) -> str:
         str: correct full path of file
     """
 
-    try:
-        # PyInstaller creates a temp folder and stores path into var _MEIPASS
-        base_path: str = sys._MEIPASS
-    except AttributeError:
-        base_path: str = os.path.abspath("./assets/csv/")
+    # PyInstaller creates a temp folder and stores path into var _MEIPASS
+    base_path: str = getattr(sys, "_MEIPASS", os.path.abspath("./assets/csv/"))
 
     return os.path.join(base_path, relative_path)
 
@@ -49,30 +47,37 @@ def parse_xml(path: Path) -> tuple[list[elemTree.Element], list[str], str]:
     a_id: list[str] = []
 
     # XML structure
-    tree: elemTree = elemTree.parse(path)
+    tree: elemTree.ElementTree = defusedElemTree.parse(path)
     root: elemTree.Element = tree.getroot()
 
-    invoice_nr: str = root.find(".//DatiGenerali/DatiGeneraliDocumento/Numero").text
+    tmp = root.find(".//DatiGenerali/DatiGeneraliDocumento/Numero")
+    invoice_nr: str = tmp.text if tmp is not None and tmp.text is not None else ""
 
     c_path = ".//CessionarioCommittente/DatiAnagrafici/Anagrafica"
+    customer_xml: str
     try:
-        customer_xml: str = root.find(f"{c_path}/Denominazione").text
+        tmp = root.find(f"{c_path}/Denominazione")
+        customer_xml = tmp.text if tmp is not None and tmp.text is not None else ""
     except AttributeError:
-        first_name: str = root.find(f"{c_path}/Nome").text
-        last_name: str = root.find(f"{c_path}/Cognome").text
-        customer_xml: str = f"{last_name} {first_name}"
+        tmp = root.find(f"{c_path}/Nome")
+        first_name: str = tmp.text if tmp is not None and tmp.text is not None else ""
+        tmp = root.find(f"{c_path}/Cognome")
+        last_name: str = tmp.text if tmp is not None and tmp.text is not None else ""
+        customer_xml = f"{last_name} {first_name}"
     customer: str = shorten_customer_name(customer_xml.replace(".", "")).replace(" ", "_")
 
     name: str = "FATT_NR_" + invoice_nr + "_" + customer
 
     dbs: elemTree.Element | None = root.find(".//DatiBeniServizi")
-    details: list[elemTree.Element] = dbs.findall("DettaglioLinee")
+    details: list[elemTree.Element] = dbs.findall("DettaglioLinee") if dbs else []
 
     # Remove last element -useless in this XML file-
     details.pop(len(details) - 1)
 
     for node in details:
-        a_id.append(node.find("Descrizione").text.partition(" ")[0])
+        tmp = node.find("Descrizione")
+        description = tmp.text if tmp is not None and tmp.text is not None else ""
+        a_id.append(description.partition(" ")[0])
 
     print("Done!")
     return details, a_id, name
@@ -219,7 +224,9 @@ def format_xlsx(data_frame: pd.DataFrame, writer):
 
     # Auto-adjust columns' width
     for column in data_frame:
-        column_width = max(data_frame[column].astype(str).map(len).max(), len(column))
+        column_width = max(
+            data_frame[column].apply(lambda x: len(str(x))).max(), len(str(column))
+        )
         column_width = max(column_width, 5)
         col_idx = data_frame.columns.get_loc(column)
         worksheet.set_column(col_idx, col_idx, column_width)
