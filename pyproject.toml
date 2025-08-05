@@ -12,7 +12,7 @@ defusedxml = "~0.7"
 pandas = "2.2.1"
 py2app = "~0.28"
 # pyinstaller = "~5.13"
-setuptools = "70.3.0"
+setuptools = "80.9.0"
 xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
