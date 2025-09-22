@@ -17,10 +17,10 @@ xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "~1.8"
-black = "~25.1"
+black = "~25.9"
 isort = "~5.13"
-mypy = "~1.15"
-pip-audit = "~2.8"
+mypy = "~1.18"
+pip-audit = "~2.9"
 pylint = "~3.3"
 types-setuptools = "70.3.0.20240710"
 
