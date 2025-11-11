@@ -29,6 +29,7 @@ In both cases, the app will be available in `dist/` folder.
 **Create DMG**
 
 Once the release version is ready:
+
 - install `brew install create-dmg`
 - run
   ```sh

@@ -3,7 +3,7 @@
 A list of useful commands for working on this project.
 
 | Command                           | Description                    |
-|-----------------------------------|--------------------------------|
+| --------------------------------- | ------------------------------ |
 | `make clean`                      | Force a clean environment      |
 | `make help`                       | Show `make` help menu          |
 | `make lint`                       | Autolint code                  |
