@@ -16,7 +16,7 @@ setuptools = "70.3.0"
 xlsxwriter = "~3.2"
 
 [tool.poetry.group.dev.dependencies]
-bandit = "~1.8"
+bandit = "~1.9"
 black = "~25.11"
 isort = "~7.0"
 mypy = "~1.18"
