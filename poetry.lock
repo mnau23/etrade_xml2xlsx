@@ -1508,14 +1508,14 @@ files = [
 
 [[package]]
 name = "types-setuptools"
-version = "70.3.0.20240710"
+version = "80.9.0.20251223"
 description = "Typing stubs for setuptools"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types-setuptools-70.3.0.20240710.tar.gz", hash = "sha256:842cbf399812d2b65042c9d6ff35113bbf282dee38794779aa1f94e597bafc35"},
-    {file = "types_setuptools-70.3.0.20240710-py3-none-any.whl", hash = "sha256:bd0db2a4b9f2c49ac5564be4e0fb3125c4c46b1f73eafdcbceffa5b005cceca4"},
+    {file = "types_setuptools-80.9.0.20251223-py3-none-any.whl", hash = "sha256:1b36db79d724c2287d83dc052cf887b47c0da6a2fff044378be0b019545f56e6"},
+    {file = "types_setuptools-80.9.0.20251223.tar.gz", hash = "sha256:d3411059ae2f5f03985217d86ac6084efea2c9e9cacd5f0869ef950f308169b2"},
 ]
 
 [[package]]
@@ -1575,4 +1575,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.13"
-content-hash = "7fe6bd067a73fc1c8e37d257208ebc14d2a2f3a539e1bb4468e14a778340bde7"
+content-hash = "8159fb9482aa8bf46e5d14bf1326558e1e7a6f2ce9c13091477d3f0d94ed4dbd"
