@@ -1,0 +1,47 @@
+name: Pre-commit auto-update
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'  # runs every Monday at 07:00 AM UTC (08:00 AM CET / 09:00 AM CEST)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Setup Python
+        uses: actions/setup-python@v6.1.0
+        with:
+          python-version: '3.x'
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Update hooks
+        id: update
+        run: |
+          OUTPUT="$(pre-commit autoupdate)"
+          echo "$OUTPUT" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo 'logs<<EOF'
+            echo "$OUTPUT"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8.0.0
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: 'bump version(s)'
+          title: 'chore: update pre-commit hooks'
+          body: ${{ steps.update.outputs.logs }}
+          branch: update-pre-commit-hooks
+          delete-branch: true
+          labels: dependencies
