@@ -18,7 +18,7 @@ xlsxwriter = "~3.2"
 [tool.poetry.group.dev.dependencies]
 bandit = "~1.9"
 black = "~26.1"
-isort = "~7.0"
+isort = "~8.0"
 mypy = "~1.19"
 pip-audit = "~2.10"
 pylint = "~4.0"
