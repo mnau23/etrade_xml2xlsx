@@ -2,19 +2,19 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: check-yaml
       - id: check-toml
+      - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+
+  # archived - but still works
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        types: [markdown]
 
   - repo: https://github.com/psf/black
     rev: 26.1.0
     hooks:
       - id: black
-
-  # archived - but still works
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v4.0.0-alpha.8"
-    hooks:
-      - id: prettier
-        types: [markdown]
