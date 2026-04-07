@@ -2,24 +2,33 @@ name: Pre-commit auto-update
 
 on:
   schedule:
-    - cron: 0 7 * * 1  # runs every Monday at 07:00 AM UTC (08:00 AM CET / 09:00 AM CEST)
+    - cron: "0 7 1 * *"  # runs on the 1st day of every month at 07:00 AM UTC (08:00 AM CET / 09:00 AM CEST)
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+concurrency:
+  group: pre-commit-autoupdate
+  cancel-in-progress: true
+
+permissions: {}
 
 jobs:
   auto-update:
+    name: Auto-update hooks
     runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write       # required for creating a commit to a branch
+      pull-requests: write  # required for creating/updating PR, adding labels and reviewers
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: 3.14
+          python-version: '3.14'
 
       - name: Install pre-commit
         run: pip install pre-commit
@@ -36,7 +45,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: bump version(s)
